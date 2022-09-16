@@ -1,0 +1,30 @@
+swagger-api:
+  version: "1.0"
+
+
+server:
+  port: 2022
+  servlet:
+    context-path: /Library
+
+spring:
+  jpa:
+    database: postgresql
+    open-in-view: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/Library
+    username: postgres
+    password: root
+
+
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+
+spring.autoconfigure.exclude: org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
