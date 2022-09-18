@@ -11,6 +11,8 @@ spring:
   jpa:
     database: postgresql
     open-in-view: true
+    hibernate:
+      ddl-auto: validate
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/Library
