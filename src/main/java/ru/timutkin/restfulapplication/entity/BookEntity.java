@@ -1,4 +1,4 @@
-package ru.timutlin.restfulapplication.entity;
+package ru.timutkin.restfulapplication.entity;
 
 import lombok.*;
 

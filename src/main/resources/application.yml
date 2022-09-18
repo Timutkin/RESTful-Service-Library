@@ -20,6 +20,9 @@ spring:
     password: root
 
 
+logging:
+  level:
+    web: error
 
 
 management:

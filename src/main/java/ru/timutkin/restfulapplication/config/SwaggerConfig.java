@@ -1,11 +1,11 @@
-package ru.timutlin.restfulapplication.config;
+package ru.timutkin.restfulapplication.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.timutlin.restfulapplication.web.constant.SwaggerInfo;
+import ru.timutkin.restfulapplication.web.constant.SwaggerInfo;
 
 @Configuration
 public class SwaggerConfig {

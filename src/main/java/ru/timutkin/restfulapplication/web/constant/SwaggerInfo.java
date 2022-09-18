@@ -1,4 +1,4 @@
-package ru.timutlin.restfulapplication.web.constant;
+package ru.timutkin.restfulapplication.web.constant;
 
 import lombok.experimental.UtilityClass;
 

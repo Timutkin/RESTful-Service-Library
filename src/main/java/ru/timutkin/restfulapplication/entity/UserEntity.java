@@ -1,9 +1,8 @@
-package ru.timutlin.restfulapplication.entity;
+package ru.timutkin.restfulapplication.entity;
 
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,7 +27,7 @@ public class UserEntity {
 
     private String email;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_book",
             joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id")

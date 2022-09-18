@@ -1,4 +1,4 @@
-package ru.timutlin.restfulapplication;
+package ru.timutkin.restfulapplication;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
