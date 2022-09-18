@@ -15,20 +15,19 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(value = {EmailAlreadyExistsException.class})
     public ResponseEntity<Response> handleEmailAlreadyExistException(@NonNull final EmailAlreadyExistsException exc) {
-        log.error(exc.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(new Response(createErrorMessage(exc)));
     }
 
     @ExceptionHandler(value = {UserNotFoundException.class})
     public ResponseEntity<Response> handleNotFoundException(@NonNull final UserNotFoundException exc) {
-        log.error(exc.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new Response(createErrorMessage(exc)));
     }
 
     private String createErrorMessage(Exception exception) {
         final String message = exception.getMessage();
-        return message;
+        log.debug(ExceptionHandlerUtils.buildErrorMessage(exception));
+        return exception.getMessage();
     }
 }
