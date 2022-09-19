@@ -11,5 +11,5 @@ public interface UserService {
 
     UserDTO getUserById(Long id) throws  UserNotFoundException;
 
-    UserDTO updateUser(UserDTO updateUserDTO) throws UserNotFoundException, EmailAlreadyExistsException;
+    void updateUser(UserDTO updateUserDTO) throws UserNotFoundException, EmailAlreadyExistsException;
 }

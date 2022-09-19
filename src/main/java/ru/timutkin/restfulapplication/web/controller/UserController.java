@@ -84,8 +84,8 @@ public class UserController {
                                     schema = @Schema(implementation = ErrorResponse.class))),
             })
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO){
-        UserDTO updateUserDTO = userService.updateUser(userDTO);
-        return ResponseEntity.ok(updateUserDTO);
+        userService.updateUser(userDTO);
+        return ResponseEntity.ok(userDTO);
     }
 
 }

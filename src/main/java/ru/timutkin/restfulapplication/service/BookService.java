@@ -8,4 +8,8 @@ public interface BookService {
     Long createBook(BookDTO bookDTO);
 
     BookDTO getBookById(Long id) throws BookNotFoundException;
+
+    void deleteBookById(Long id) throws BookNotFoundException;
+
+    void updateBook(BookDTO bookDTO) ;
 }

@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface BookRepository extends JpaRepository<BookEntity, Long> {
     @Override
     Optional<BookEntity> findById(Long id);
+
+    void deleteById(Long id);
 }

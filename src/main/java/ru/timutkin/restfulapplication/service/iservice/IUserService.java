@@ -61,7 +61,7 @@ public class IUserService implements UserService {
 
     @Override
     @Transactional
-    public UserDTO updateUser(UserDTO updateUserDTO) {
+    public void updateUser(UserDTO updateUserDTO) {
         if (!userRepository.existsById(updateUserDTO.getId())){
             throw new UserNotFoundException(String.format(ResponseConstant.USER_WITH_ID_NOT_FOUND,updateUserDTO.getId()));
         }
@@ -71,6 +71,6 @@ public class IUserService implements UserService {
         }
         UserEntity userEntity = userMapper.userDtoToUserEntity(updateUserDTO);
         userRepository.save(userEntity);
-        return userMapper.userEntityToUserDto(userEntity);
+
     }
 }

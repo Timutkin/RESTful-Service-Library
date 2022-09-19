@@ -9,7 +9,7 @@ public class ResponseConstant {
 
     public static final String USER_WITH_ID_NOT_FOUND = "User with id = %d not found";
 
-    public static final String BOOk_WITH_ID_NOT_FOUND = "Book with id = %d not found";
+    public static final String BOOK_WITH_ID_D_NOT_FOUND = "Book with id = %d not found";
 
     public static final String INCORRECT_COUNT_OF_PAGE = "The book count of page don't should be more 4000";
 
