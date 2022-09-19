@@ -12,7 +12,7 @@ import ru.timutkin.restfulapplication.dto.UserDTO;
 import ru.timutkin.restfulapplication.service.UserService;
 import ru.timutkin.restfulapplication.web.constant.ResponseConstant;
 import ru.timutkin.restfulapplication.web.constant.WebConstant;
-import ru.timutkin.restfulapplication.web.response.Response;
+import ru.timutkin.restfulapplication.web.response.ErrorResponse;
 
 
 @RestController
@@ -24,7 +24,7 @@ public class UserController {
     UserService userService;
 
     @PostMapping
-    @Operation(summary = "Created new user of library",
+    @Operation(summary = "Creates a new user of library",
             responses = {
                 @ApiResponse(responseCode = "200",
                         content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -32,13 +32,14 @@ public class UserController {
                         )),
                 @ApiResponse(description = ResponseConstant.USER_WITH_EMAIL_ALREADY_EXISTS, responseCode = "409",
                         content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                schema = @Schema(implementation = Response.class)))})
+                                schema = @Schema(implementation = ErrorResponse.class)))})
     public ResponseEntity<Long> createUser(@RequestBody UserDTO userDTO){
         Long userId = userService.createUser(userDTO);
         return ResponseEntity.ok(userId);
     }
 
-    @Operation(summary = "Deleted user with id ",
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Deletes a user by id",
             responses = {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -46,12 +47,45 @@ public class UserController {
                             )),
                     @ApiResponse(description = ResponseConstant.USER_WITH_ID_NOT_FOUND, responseCode = "400",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Response.class)))})
-    @DeleteMapping("/{id}")
+                                    schema = @Schema(implementation = ErrorResponse.class)))})
     public ResponseEntity<Long> deleteUser(@PathVariable Long id){
         userService.deleteUser(id);
         return ResponseEntity.ok(id);
     }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "Gets a user by id",
+            responses = {
+                    @ApiResponse( responseCode = "200",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = UserDTO.class)
+                            )),
+                    @ApiResponse(description = ResponseConstant.USER_WITH_ID_NOT_FOUND, responseCode = "400",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ErrorResponse.class)))})
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id){
+        UserDTO userDTO = userService.getUserById(id);
+        return ResponseEntity.ok(userDTO);
+    }
+
+
+    @PutMapping
+    @Operation(summary = "Updates a user",
+            responses = {
+                    @ApiResponse( responseCode = "200",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = UserDTO.class)
+                            )),
+                    @ApiResponse(description = ResponseConstant.USER_WITH_ID_NOT_FOUND, responseCode = "400",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(description = ResponseConstant.USER_WITH_EMAIL_ALREADY_EXISTS, responseCode = "409",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ErrorResponse.class))),
+            })
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO){
+        UserDTO updateUserDTO = userService.updateUser(userDTO);
+        return ResponseEntity.ok(updateUserDTO);
+    }
 
 }

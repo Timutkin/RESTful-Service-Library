@@ -3,7 +3,7 @@ swagger-api:
 
 
 server:
-  port: 2022
+  port: 6666
   servlet:
     context-path: /Library
 

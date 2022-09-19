@@ -6,28 +6,36 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import ru.timutkin.restfulapplication.exception.BookNotFoundException;
 import ru.timutkin.restfulapplication.exception.EmailAlreadyExistsException;
+import ru.timutkin.restfulapplication.exception.IncorrectDataException;
 import ru.timutkin.restfulapplication.exception.UserNotFoundException;
-import ru.timutkin.restfulapplication.web.response.Response;
+import ru.timutkin.restfulapplication.web.response.ErrorResponse;
 @Slf4j
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
     @ExceptionHandler(value = {EmailAlreadyExistsException.class})
-    public ResponseEntity<Response> handleEmailAlreadyExistException(@NonNull final EmailAlreadyExistsException exc) {
+    public ResponseEntity<ErrorResponse> handleEmailAlreadyExistException(@NonNull final EmailAlreadyExistsException exc) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new Response(createErrorMessage(exc)));
+                .body(new ErrorResponse(createErrorMessage(exc)));
     }
 
-    @ExceptionHandler(value = {UserNotFoundException.class})
-    public ResponseEntity<Response> handleNotFoundException(@NonNull final UserNotFoundException exc) {
+    @ExceptionHandler(value = {UserNotFoundException.class, BookNotFoundException.class})
+    public ResponseEntity<ErrorResponse> handleNotFoundException(@NonNull final IllegalArgumentException exc) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new Response(createErrorMessage(exc)));
+                .body(new ErrorResponse(createErrorMessage(exc)));
     }
+
+    @ExceptionHandler(value = {IncorrectDataException.class})
+    public ResponseEntity<ErrorResponse> handleIncorrectDataException(@NonNull final IncorrectDataException exc) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(createErrorMessage(exc)));
+    }
+
 
     private String createErrorMessage(Exception exception) {
-        final String message = exception.getMessage();
-        log.debug(ExceptionHandlerUtils.buildErrorMessage(exception));
+        log.error(ExceptionHandlerUtils.buildErrorMessage(exception));
         return exception.getMessage();
     }
 }

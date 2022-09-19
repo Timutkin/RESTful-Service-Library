@@ -3,6 +3,7 @@ package ru.timutkin.restfulapplication.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "book", schema = "public")
@@ -22,13 +23,15 @@ public class BookEntity {
 
     private String author;
 
+    @Column(name = "number_parts")
+    private Integer numberOfParts;
+
     @Column(name = "year_print")
-    private int yearOfPrinting;
+    private Integer yearOfPrinting;
 
     @Column(name = "count_page" )
-    private int countOfPage;
+    private Integer countOfPage;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    UserEntity userEntity;
+    @ManyToMany(mappedBy = "listOfBooks")
+    Set<UserEntity> users;
 }
