@@ -1,6 +1,7 @@
 package ru.timutkin.restfulapplication.entity;
 
 import lombok.*;
+import ru.timutkin.restfulapplication.enumeration.GenreOfLiterature;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -21,7 +22,13 @@ public class BookEntity {
 
     private String title;
 
-    private String author;
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private AuthorEntity author;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "genre_literature")
+    private GenreOfLiterature genreOfLiterature;
 
     @Column(name = "number_parts")
     private Integer numberOfParts;
