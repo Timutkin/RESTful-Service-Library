@@ -9,4 +9,5 @@ import ru.timutkin.restfulapplication.entity.BookEntity;
 public interface BookMapper {
     BookDTO bookEntityToBookDto(BookEntity bookEntity);
     BookEntity bookDtoToBookEntity(BookDTO bookDTO);
+
 }

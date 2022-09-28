@@ -22,7 +22,7 @@ spring:
 
 logging:
   level:
-    web: error
+    web: debug
 
 
 management:

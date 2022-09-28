@@ -3,6 +3,7 @@ package ru.timutkin.restfulapplication.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -32,6 +33,6 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id")
     )
-    Set<BookEntity> listOfBooks;
+    Set<BookEntity> listOfBooks = new HashSet<>();
 
 }

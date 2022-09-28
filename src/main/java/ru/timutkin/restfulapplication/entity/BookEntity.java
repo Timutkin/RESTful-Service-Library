@@ -4,6 +4,8 @@ import lombok.*;
 import ru.timutkin.restfulapplication.enumeration.GenreOfLiterature;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,9 +24,12 @@ public class BookEntity {
 
     private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id")
-    private AuthorEntity author;
+    @ManyToMany
+    @JoinTable(name = "book_author",
+            joinColumns = @JoinColumn(name = "book_id",referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id")
+    )
+    private Set<AuthorEntity> authors = new HashSet<>();
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "genre_literature")
@@ -41,4 +46,13 @@ public class BookEntity {
 
     @ManyToMany(mappedBy = "listOfBooks")
     Set<UserEntity> users;
+
+    public void addAuthor(AuthorEntity author){
+        authors.add(author);
+        author.getBooks().add(this);
+    }
+
+    public void addAuthors(Set<AuthorEntity> authors){
+        authors.forEach(this::addAuthor);
+    }
 }

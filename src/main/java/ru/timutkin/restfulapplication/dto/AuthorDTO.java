@@ -4,25 +4,25 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.timutkin.restfulapplication.enumeration.GenreOfLiterature;
 
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 @ToString
-public class BookDTO {
-    Long id;
+@NoArgsConstructor
+public class AuthorDTO {
+     Long id;
 
-    String title;
+     String firstName;
 
-    Integer yearOfPrinting;
+     String lastName;
 
-    Integer numberOfParts;
+     String patronymic;
 
-    Integer countOfPage;
+     LocalDate yearOfBirth;
 
-    GenreOfLiterature genre;
 
 }

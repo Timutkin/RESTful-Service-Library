@@ -3,6 +3,7 @@ package ru.timutkin.restfulapplication.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -28,10 +29,19 @@ public class AuthorEntity {
     private String lastName;
 
     private String patronymic;
-
+    @Column(name = "year_birth")
     private int yearOfBirth;
 
-    @OneToMany(mappedBy = "author")
-    Set<BookEntity> books;
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
+    Set<BookEntity> books = new HashSet<>();
+
+    public void addBook(BookEntity book){
+        books.add(book);
+        book.getAuthors().add(this);
+    }
+
+    public void addBooks(Set<AuthorEntity> authors){
+        books.forEach(this::addBook);
+    }
 
 }
