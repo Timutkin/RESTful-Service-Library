@@ -31,7 +31,7 @@ public class BookEntity {
     )
     private Set<AuthorEntity> authors = new HashSet<>();
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     @Column(name = "genre_literature")
     private GenreOfLiterature genreOfLiterature;
 
@@ -52,7 +52,4 @@ public class BookEntity {
         author.getBooks().add(this);
     }
 
-    public void addAuthors(Set<AuthorEntity> authors){
-        authors.forEach(this::addAuthor);
-    }
 }

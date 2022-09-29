@@ -23,6 +23,6 @@ public class BookDTO {
 
     Integer countOfPage;
 
-    GenreOfLiterature genre;
+    GenreOfLiterature genreOfLiterature;
 
 }
