@@ -25,9 +25,8 @@ public class AuthorController {
 
     @PostMapping
     public ResponseEntity<Long> createAuthor(@RequestBody AuthorBookRequest authorBookRequest){
-        System.out.println(authorBookRequest.getBookDtoList());
-        authorDataFacade.createAuthor(authorBookRequest);
-        return ResponseEntity.ok(1l);
+        Long id = authorDataFacade.createAuthor(authorBookRequest);
+        return ResponseEntity.ok(id);
     }
 
 }

@@ -13,4 +13,9 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
     Optional<BookEntity> findById(Long id);
 
     void deleteById(Long id);
+
+    boolean existsById(Long id);
+
+    BookEntity getBookEntityById(Long id);
+
 }

@@ -2,6 +2,7 @@ package ru.timutkin.restfulapplication.service.iservice;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.timutkin.restfulapplication.dto.AuthorDTO;
 import ru.timutkin.restfulapplication.dto.BookDTO;
 import ru.timutkin.restfulapplication.entity.AuthorEntity;
@@ -32,6 +33,7 @@ public class IAuthorService implements AuthorService {
     BookRepository bookRepository;
 
 
+    @Transactional
     @Override
     public Long createAuthorWithoutBooks(AuthorDTO authorDTO) throws IncorrectDataException {
         AuthorEntity authorEntity = authorMapper.authorDtoToEntity(authorDTO);
@@ -39,17 +41,30 @@ public class IAuthorService implements AuthorService {
         return authorEntity.getId();
     }
 
+    @Transactional
     @Override
     public Long createAuthorWithBooks(AuthorDTO authorDTO, List<BookDTO> list) throws IncorrectDataException {
+
         AuthorEntity authorEntity = authorMapper.authorDtoToEntity(authorDTO);
         authorEntity.setBooks(new HashSet<>());
-        Set<BookEntity> unsavedBookEntity = list.stream()
+
+        list.stream()
                 .map(bookMapper::bookDtoToBookEntity)
-                .filter(bookEntity -> bookEntity.getId() == null).collect(Collectors.toSet());
-        bookRepository.saveAll(unsavedBookEntity);
-        unsavedBookEntity.forEach(el-> el.setAuthors(new HashSet<>()));
-        unsavedBookEntity.forEach(authorEntity::addBook);
+                .filter(bookEntity -> bookEntity.getId() == null)
+                .peek(el-> el.setAuthors(new HashSet<>()))
+                .peek(bookRepository::save)
+                .forEach(authorEntity::addBook);
+
         authorRepository.save(authorEntity);
+
+        list.stream()
+                .map(bookMapper::bookDtoToBookEntity)
+                .filter(bookEntity -> bookEntity.getId() != null)
+                .map(bookEntity -> bookRepository.getBookEntityById(bookEntity.getId()))
+                .forEach(authorEntity::addBook);
+
+        authorRepository.saveAndFlush(authorEntity);
+
         return authorEntity.getId();
     }
 }
