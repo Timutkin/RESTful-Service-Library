@@ -13,6 +13,7 @@ import ru.timutkin.restfulapplication.mapper.BookMapper;
 import ru.timutkin.restfulapplication.repository.AuthorRepository;
 import ru.timutkin.restfulapplication.repository.BookRepository;
 import ru.timutkin.restfulapplication.service.AuthorService;
+import ru.timutkin.restfulapplication.web.response.AuthorResponse;
 
 import java.util.HashSet;
 import java.util.List;
@@ -35,16 +36,18 @@ public class IAuthorService implements AuthorService {
 
     @Transactional
     @Override
-    public Long createAuthorWithoutBooks(AuthorDTO authorDTO) throws IncorrectDataException {
+    public AuthorResponse createAuthorWithoutBooks(AuthorDTO authorDTO) throws IncorrectDataException {
         AuthorEntity authorEntity = authorMapper.authorDtoToEntity(authorDTO);
         authorRepository.save(authorEntity);
-        return authorEntity.getId();
+        return AuthorResponse.builder()
+                .authorDTO(authorMapper.authorEntityToAuthorDto(authorEntity))
+                .build();
     }
 
     @Transactional
     @Override
-    public Long createAuthorWithBooks(AuthorDTO authorDTO, List<BookDTO> list) throws IncorrectDataException {
-
+    public AuthorResponse createAuthorWithBooks(AuthorDTO authorDTO, List<BookDTO> list) throws IncorrectDataException {
+        AuthorResponse authorResponse = new AuthorResponse();
         AuthorEntity authorEntity = authorMapper.authorDtoToEntity(authorDTO);
         authorEntity.setBooks(new HashSet<>());
 
@@ -53,6 +56,7 @@ public class IAuthorService implements AuthorService {
                 .filter(bookEntity -> bookEntity.getId() == null)
                 .peek(el-> el.setAuthors(new HashSet<>()))
                 .peek(bookRepository::save)
+                .peek(bookEntity -> authorResponse.addBookId(bookEntity.getId()))
                 .forEach(authorEntity::addBook);
 
         authorRepository.save(authorEntity);
@@ -60,11 +64,14 @@ public class IAuthorService implements AuthorService {
         list.stream()
                 .map(bookMapper::bookDtoToBookEntity)
                 .filter(bookEntity -> bookEntity.getId() != null)
+                .peek(bookEntity -> authorResponse.addBookId(bookEntity.getId()))
                 .map(bookEntity -> bookRepository.getBookEntityById(bookEntity.getId()))
                 .forEach(authorEntity::addBook);
 
         authorRepository.saveAndFlush(authorEntity);
 
-        return authorEntity.getId();
+        authorResponse.setAuthorDTO(authorMapper.authorEntityToAuthorDto(authorEntity));
+
+        return authorResponse;
     }
 }

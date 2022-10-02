@@ -7,6 +7,7 @@ import ru.timutkin.restfulapplication.dto.BookDTO;
 import ru.timutkin.restfulapplication.service.AuthorService;
 
 import ru.timutkin.restfulapplication.web.request.AuthorBookRequest;
+import ru.timutkin.restfulapplication.web.response.AuthorResponse;
 
 import java.util.List;
 
@@ -16,16 +17,16 @@ public class AuthorDataFacade {
 
     AuthorService authorService;
 
-    public Long createAuthor(AuthorBookRequest authorBookRequest) {
+    public AuthorResponse createAuthor(AuthorBookRequest authorBookRequest) {
         AuthorDTO authorDTO = authorBookRequest.getAuthorDto();
         List<BookDTO> bookDTOList = authorBookRequest.getBookDtoList();
-        Long id;
+        AuthorResponse response;
         if (authorBookRequest.getBookDtoList()==null || authorBookRequest.getBookDtoList().isEmpty()){
-            id = authorService.createAuthorWithoutBooks(authorDTO);
+            response = authorService.createAuthorWithoutBooks(authorDTO);
         }
         else {
-            id = authorService.createAuthorWithBooks(authorDTO, bookDTOList);
+            response = authorService.createAuthorWithBooks(authorDTO, bookDTOList);
         }
-        return id;
+        return response;
     }
 }
