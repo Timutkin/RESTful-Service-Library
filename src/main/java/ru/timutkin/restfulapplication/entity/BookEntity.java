@@ -1,6 +1,8 @@
 package ru.timutkin.restfulapplication.entity;
 
 import lombok.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import ru.timutkin.restfulapplication.enumeration.GenreOfLiterature;
 
 import javax.persistence.*;
@@ -52,4 +54,19 @@ public class BookEntity {
         author.getBooks().add(this);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof BookEntity)) return false;
+
+        BookEntity that = (BookEntity) o;
+
+        return new EqualsBuilder().append(getTitle(), that.getTitle()).append(getGenreOfLiterature(), that.getGenreOfLiterature()).append(getNumberOfParts(), that.getNumberOfParts()).append(getYearOfPrinting(), that.getYearOfPrinting()).append(getCountOfPage(), that.getCountOfPage()).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(getTitle()).append(getGenreOfLiterature()).append(getNumberOfParts()).append(getYearOfPrinting()).append(getCountOfPage()).toHashCode();
+    }
 }

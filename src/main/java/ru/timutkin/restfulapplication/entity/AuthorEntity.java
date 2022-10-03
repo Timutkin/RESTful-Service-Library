@@ -1,6 +1,8 @@
 package ru.timutkin.restfulapplication.entity;
 
 import lombok.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -41,5 +43,28 @@ public class AuthorEntity {
         book.getAuthors().add(this);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
 
+        if (!(o instanceof AuthorEntity)) return false;
+
+        AuthorEntity that = (AuthorEntity) o;
+
+        return new EqualsBuilder()
+                .append(getFirstName(), that.getFirstName())
+                .append(getLastName(), that.getLastName())
+                .append(getPatronymic(), that.getPatronymic())
+                .append(getYearOfBirth(), that.getYearOfBirth()).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getFirstName())
+                .append(getLastName())
+                .append(getPatronymic())
+                .append(getYearOfBirth())
+                .toHashCode();
+    }
 }

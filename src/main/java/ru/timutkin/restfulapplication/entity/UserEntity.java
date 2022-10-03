@@ -1,6 +1,8 @@
 package ru.timutkin.restfulapplication.entity;
 
 import lombok.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -35,4 +37,19 @@ public class UserEntity {
     )
     Set<BookEntity> listOfBooks = new HashSet<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof UserEntity)) return false;
+
+        UserEntity that = (UserEntity) o;
+
+        return new EqualsBuilder().append(getFirstName(), that.getFirstName()).append(getLastName(), that.getLastName()).append(getEmail(), that.getEmail()).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(getFirstName()).append(getLastName()).append(getEmail()).toHashCode();
+    }
 }
