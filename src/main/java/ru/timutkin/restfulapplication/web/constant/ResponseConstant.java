@@ -13,5 +13,11 @@ public class ResponseConstant {
 
     public static final String INCORRECT_COUNT_OF_PAGE = "The book count of page don't should be more 4000";
 
+    public static final String BOOK_ALREADY_EXISTS = "Book with this title and yearOfPrinting already exists";
+
+    public static final String AUTHOR_ALREADY_EXISTS = "This author already exists";
+
+
+
 
 }

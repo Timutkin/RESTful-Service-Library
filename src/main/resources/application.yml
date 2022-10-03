@@ -1,7 +1,6 @@
 swagger-api:
   version: "1.0"
 
-
 server:
   port: 2000
   servlet:

@@ -2,22 +2,21 @@ package ru.timutkin.restfulapplication.web.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.timutkin.restfulapplication.dto.AuthorDTO;
+import ru.timutkin.restfulapplication.dto.BookDTO;
 
 import java.util.ArrayList;
 import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthorResponse {
-    AuthorDTO authorDTO;
-    List<Long> booksId = new ArrayList<>();
+public class BookResponse {
+    BookDTO bookDTO;
+    List<Long> authorsId = new ArrayList<>();
 
-    public void addBookId(Long id){
-        booksId.add(id);
+    public void addAuthorById(Long id){
+        authorsId.add(id);
     }
 }

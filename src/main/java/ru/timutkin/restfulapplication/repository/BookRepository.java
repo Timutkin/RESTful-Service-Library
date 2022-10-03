@@ -1,7 +1,6 @@
 package ru.timutkin.restfulapplication.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.timutkin.restfulapplication.entity.BookEntity;
 
@@ -17,5 +16,9 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
     boolean existsById(Long id);
 
     BookEntity getBookEntityById(Long id);
+
+    boolean existsByTitle(String title);
+
+    boolean existsByTitleAndYearOfPrinting(String title, Integer yearOfPrinting);
 
 }

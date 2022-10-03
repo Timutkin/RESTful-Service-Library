@@ -7,12 +7,14 @@ import ru.timutkin.restfulapplication.dto.AuthorDTO;
 import ru.timutkin.restfulapplication.dto.BookDTO;
 import ru.timutkin.restfulapplication.entity.AuthorEntity;
 import ru.timutkin.restfulapplication.entity.BookEntity;
+import ru.timutkin.restfulapplication.exception.DataAlreadyExistsException;
 import ru.timutkin.restfulapplication.exception.IncorrectDataException;
 import ru.timutkin.restfulapplication.mapper.AuthorMapper;
 import ru.timutkin.restfulapplication.mapper.BookMapper;
 import ru.timutkin.restfulapplication.repository.AuthorRepository;
 import ru.timutkin.restfulapplication.repository.BookRepository;
 import ru.timutkin.restfulapplication.service.AuthorService;
+import ru.timutkin.restfulapplication.web.constant.ResponseConstant;
 import ru.timutkin.restfulapplication.web.response.AuthorResponse;
 
 import java.util.HashSet;
@@ -37,6 +39,11 @@ public class IAuthorService implements AuthorService {
     @Transactional
     @Override
     public AuthorResponse createAuthorWithoutBooks(AuthorDTO authorDTO) throws IncorrectDataException {
+        if (authorRepository.existsByFirstNameAndAndLastNameAndAndPatronymicAndYearOfBirth(
+                authorDTO.getFirstName(), authorDTO.getLastName(), authorDTO.getPatronymic(), authorDTO.getYearOfBirth()
+        )){
+            throw new DataAlreadyExistsException(ResponseConstant.AUTHOR_ALREADY_EXISTS);
+        }
         AuthorEntity authorEntity = authorMapper.authorDtoToEntity(authorDTO);
         authorRepository.save(authorEntity);
         return AuthorResponse.builder()
@@ -47,8 +54,15 @@ public class IAuthorService implements AuthorService {
     @Transactional
     @Override
     public AuthorResponse createAuthorWithBooks(AuthorDTO authorDTO, List<BookDTO> list) throws IncorrectDataException {
+        if (authorRepository.existsByFirstNameAndAndLastNameAndAndPatronymicAndYearOfBirth(
+                authorDTO.getFirstName(), authorDTO.getLastName(), authorDTO.getPatronymic(), authorDTO.getYearOfBirth()
+        )){
+            throw new DataAlreadyExistsException(ResponseConstant.AUTHOR_ALREADY_EXISTS);
+        }
+
         AuthorResponse authorResponse = new AuthorResponse();
         AuthorEntity authorEntity = authorMapper.authorDtoToEntity(authorDTO);
+
         authorEntity.setBooks(new HashSet<>());
 
         list.stream()

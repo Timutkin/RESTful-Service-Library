@@ -3,14 +3,22 @@ package ru.timutkin.restfulapplication.service.iservice;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.timutkin.restfulapplication.dto.AuthorDTO;
 import ru.timutkin.restfulapplication.dto.BookDTO;
 import ru.timutkin.restfulapplication.entity.BookEntity;
 import ru.timutkin.restfulapplication.exception.BookNotFoundException;
+import ru.timutkin.restfulapplication.exception.DataAlreadyExistsException;
+import ru.timutkin.restfulapplication.mapper.AuthorMapper;
 import ru.timutkin.restfulapplication.mapper.BookMapper;
+import ru.timutkin.restfulapplication.repository.AuthorRepository;
 import ru.timutkin.restfulapplication.repository.BookRepository;
 import ru.timutkin.restfulapplication.service.BookService;
 import ru.timutkin.restfulapplication.web.constant.ResponseConstant;
+import ru.timutkin.restfulapplication.web.response.AuthorResponse;
+import ru.timutkin.restfulapplication.web.response.BookResponse;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,12 +29,21 @@ public class IBookService implements BookService {
 
     BookMapper bookMapper;
 
+    AuthorMapper authorMapper;
+
+    AuthorRepository authorRepository;
+
     @Transactional
     @Override
-    public Long createBook(BookDTO bookDTO) {
+    public BookResponse createBookWithoutAuthors(BookDTO bookDTO) {
+        if (bookRepository.existsByTitleAndYearOfPrinting(bookDTO.getTitle(), bookDTO.getYearOfPrinting())){
+            throw new DataAlreadyExistsException(ResponseConstant.BOOK_ALREADY_EXISTS);
+        }
         BookEntity bookEntity = bookMapper.bookDtoToBookEntity(bookDTO);
         bookRepository.save(bookEntity);
-        return bookEntity.getId();
+        return BookResponse.builder()
+                .bookDTO(bookMapper.bookEntityToBookDto(bookEntity))
+                .build();
     }
 
     @Override
@@ -51,11 +68,46 @@ public class IBookService implements BookService {
     }
 
     @Override
+    @Transactional
     public void updateBook(BookDTO bookDTO) {
         if (!bookRepository.existsById(bookDTO.getId())){
             throw new BookNotFoundException(String.format(ResponseConstant.BOOK_WITH_ID_D_NOT_FOUND,bookDTO.getId()));
         }
         BookEntity bookEntity = bookMapper.bookDtoToBookEntity(bookDTO);
         bookRepository.save(bookEntity);
+    }
+
+    @Override
+    @Transactional
+    public BookResponse createBookWithAuthors(BookDTO bookDTO, List<AuthorDTO> authorDTOList) {
+        if (bookRepository.existsByTitleAndYearOfPrinting(bookDTO.getTitle(), bookDTO.getYearOfPrinting())){
+            throw new DataAlreadyExistsException(ResponseConstant.BOOK_ALREADY_EXISTS);
+        }
+        BookResponse response = new BookResponse();
+        BookEntity bookEntity = bookMapper.bookDtoToBookEntity(bookDTO);
+        bookEntity.setAuthors(new HashSet<>());
+
+        authorDTOList.stream()
+                .map(authorMapper::authorDtoToEntity)
+                .filter(authorEntity -> authorEntity.getId() == null)
+                .peek(authorEntity -> authorEntity.setBooks(new HashSet<>()))
+                .peek(authorRepository::save)
+                .peek(authorEntity-> response.addAuthorById(authorEntity.getId()))
+                .forEach(bookEntity::addAuthor);
+
+        bookRepository.save(bookEntity);
+
+        authorDTOList.stream()
+                .map(authorMapper::authorDtoToEntity)
+                .filter(authorEntity -> authorEntity.getId() != null)
+                .peek(authorEntity -> response.addAuthorById(authorEntity.getId()))
+                .map(authorEntity -> authorRepository.getAuthorEntityById(authorEntity.getId()))
+                .forEach(bookEntity::addAuthor);
+
+        bookRepository.saveAndFlush(bookEntity);
+
+        response.setBookDTO(bookMapper.bookEntityToBookDto(bookEntity));
+
+        return response;
     }
 }

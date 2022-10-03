@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthorBookRequest {
-    AuthorDTO authorDto;
-    List<BookDTO> bookDtoList;
+public class BookAuthorRequest {
+    BookDTO bookDto;
+    List<AuthorDTO> authorDtoList;
 }

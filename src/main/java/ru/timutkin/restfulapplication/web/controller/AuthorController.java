@@ -37,11 +37,17 @@ public class AuthorController {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = AuthorResponse.class)
+                            )),
+                    @ApiResponse( responseCode = "409",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ErrorResponse.class)
                             ))})
     @PostMapping
     public ResponseEntity<AuthorResponse> createAuthor(@RequestBody AuthorBookRequest authorBookRequest){
         AuthorResponse authorResponse = authorDataFacade.createAuthor(authorBookRequest);
         return ResponseEntity.ok(authorResponse);
     }
+
+
 
 }

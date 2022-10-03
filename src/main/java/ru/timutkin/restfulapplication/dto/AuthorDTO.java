@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @AllArgsConstructor
-@ToString
 @NoArgsConstructor
 public class AuthorDTO {
      Long id;

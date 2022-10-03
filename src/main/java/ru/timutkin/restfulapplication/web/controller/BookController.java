@@ -10,9 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.timutkin.restfulapplication.dto.BookDTO;
 import ru.timutkin.restfulapplication.exception.IncorrectDataException;
+import ru.timutkin.restfulapplication.facade.BookDataFacade;
 import ru.timutkin.restfulapplication.service.BookService;
 import ru.timutkin.restfulapplication.web.constant.ResponseConstant;
 import ru.timutkin.restfulapplication.web.constant.WebConstant;
+import ru.timutkin.restfulapplication.web.request.BookAuthorRequest;
+import ru.timutkin.restfulapplication.web.response.AuthorResponse;
+import ru.timutkin.restfulapplication.web.response.BookResponse;
 import ru.timutkin.restfulapplication.web.response.ErrorResponse;
 
 @AllArgsConstructor
@@ -24,6 +28,8 @@ public class BookController {
 
     BookService bookService;
 
+    BookDataFacade bookDataFacade;
+
 
     @PostMapping
     @Operation(summary = "Creates a book", description = "",
@@ -31,12 +37,16 @@ public class BookController {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = Long.class)
+                            )),
+                    @ApiResponse( responseCode = "409",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ErrorResponse.class)
                             ))})
-    public ResponseEntity<Long> createBook(@RequestBody BookDTO bookDTO){
+    public ResponseEntity<BookResponse> createBook(@RequestBody BookAuthorRequest bookAuthorRequest){
 
-        Long bookId = bookService.createBook(bookDTO);
+        BookResponse bookResponse = bookDataFacade.createBook(bookAuthorRequest);
 
-        return ResponseEntity.ok(bookId);
+        return ResponseEntity.ok(bookResponse);
     }
 
 

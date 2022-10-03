@@ -6,10 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ru.timutkin.restfulapplication.exception.BookNotFoundException;
-import ru.timutkin.restfulapplication.exception.EmailAlreadyExistsException;
-import ru.timutkin.restfulapplication.exception.IncorrectDataException;
-import ru.timutkin.restfulapplication.exception.UserNotFoundException;
+import ru.timutkin.restfulapplication.exception.*;
 import ru.timutkin.restfulapplication.web.response.ErrorResponse;
 @Slf4j
 @ControllerAdvice
@@ -17,6 +14,12 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(value = {EmailAlreadyExistsException.class})
     public ResponseEntity<ErrorResponse> handleEmailAlreadyExistException(@NonNull final EmailAlreadyExistsException exc) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse(createErrorMessage(exc)));
+    }
+
+    @ExceptionHandler(value = {DataAlreadyExistsException.class})
+    public ResponseEntity<ErrorResponse> handleDataAlreadyExistException(@NonNull final DataAlreadyExistsException exc) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(new ErrorResponse(createErrorMessage(exc)));
     }
