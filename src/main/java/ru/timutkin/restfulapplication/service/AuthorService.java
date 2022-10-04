@@ -10,4 +10,10 @@ import java.util.List;
 public interface AuthorService {
     AuthorResponse createAuthorWithoutBooks(AuthorDTO authorDTO) throws IncorrectDataException;
     AuthorResponse createAuthorWithBooks(AuthorDTO authorDTO, List<BookDTO> bookDTOList) throws IncorrectDataException;
+
+    void deleteAuthorById(Long id);
+
+    AuthorDTO getAuthorById(Long id);
+
+    void updateAuthor(AuthorDTO authorDTO);
 }

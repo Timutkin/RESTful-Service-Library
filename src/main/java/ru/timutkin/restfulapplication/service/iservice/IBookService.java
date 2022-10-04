@@ -14,7 +14,6 @@ import ru.timutkin.restfulapplication.repository.AuthorRepository;
 import ru.timutkin.restfulapplication.repository.BookRepository;
 import ru.timutkin.restfulapplication.service.BookService;
 import ru.timutkin.restfulapplication.web.constant.ResponseConstant;
-import ru.timutkin.restfulapplication.web.response.AuthorResponse;
 import ru.timutkin.restfulapplication.web.response.BookResponse;
 
 import java.util.HashSet;
@@ -70,11 +69,13 @@ public class IBookService implements BookService {
     @Override
     @Transactional
     public void updateBook(BookDTO bookDTO) {
-        if (!bookRepository.existsById(bookDTO.getId())){
+        Optional<BookEntity> bookEntity = bookRepository.findById(bookDTO.getId());
+        if (bookEntity.isEmpty()){
             throw new BookNotFoundException(String.format(ResponseConstant.BOOK_WITH_ID_D_NOT_FOUND,bookDTO.getId()));
         }
-        BookEntity bookEntity = bookMapper.bookDtoToBookEntity(bookDTO);
-        bookRepository.save(bookEntity);
+        BookEntity updatedBookEntity = bookMapper.bookDtoToBookEntity(bookDTO);
+        updatedBookEntity.setAuthors(bookEntity.get().getAuthors());
+        bookRepository.save(updatedBookEntity);
     }
 
     @Override

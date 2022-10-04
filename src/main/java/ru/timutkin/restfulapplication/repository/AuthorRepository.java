@@ -13,4 +13,6 @@ public interface AuthorRepository extends JpaRepository<AuthorEntity, Long> {
 
     boolean existsByFirstNameAndAndLastNameAndAndPatronymicAndYearOfBirth(String firstName, String lastName, String patronymic, LocalDate date);
 
+    boolean existsById(Long id);
+
 }

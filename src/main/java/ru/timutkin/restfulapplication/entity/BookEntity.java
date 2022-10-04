@@ -46,7 +46,7 @@ public class BookEntity {
     @Column(name = "count_page" )
     private Integer countOfPage;
 
-    @ManyToMany(mappedBy = "listOfBooks")
+    @ManyToMany(mappedBy = "listOfBooks", cascade = {CascadeType.MERGE})
     Set<UserEntity> users;
 
     public void addAuthor(AuthorEntity author){

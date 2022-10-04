@@ -7,6 +7,7 @@ import ru.timutkin.restfulapplication.dto.AuthorDTO;
 import ru.timutkin.restfulapplication.dto.BookDTO;
 import ru.timutkin.restfulapplication.entity.AuthorEntity;
 import ru.timutkin.restfulapplication.entity.BookEntity;
+import ru.timutkin.restfulapplication.exception.AuthorNotFoundException;
 import ru.timutkin.restfulapplication.exception.DataAlreadyExistsException;
 import ru.timutkin.restfulapplication.exception.IncorrectDataException;
 import ru.timutkin.restfulapplication.mapper.AuthorMapper;
@@ -19,6 +20,7 @@ import ru.timutkin.restfulapplication.web.response.AuthorResponse;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -87,5 +89,33 @@ public class IAuthorService implements AuthorService {
         authorResponse.setAuthorDTO(authorMapper.authorEntityToAuthorDto(authorEntity));
 
         return authorResponse;
+    }
+
+    @Override
+    public void deleteAuthorById(Long id) {
+        if (!authorRepository.existsById(id)){
+            throw new AuthorNotFoundException(String.format(ResponseConstant.AUTHOR_NOT_FOUND,id));
+        }
+        authorRepository.deleteById(id);
+    }
+
+    @Override
+    public AuthorDTO getAuthorById(Long id) {
+        Optional<AuthorEntity> authorEntity = authorRepository.findById(id);
+        if (authorEntity.isEmpty()){
+            throw new AuthorNotFoundException(ResponseConstant.AUTHOR_NOT_FOUND);
+        }
+        return authorMapper.authorEntityToAuthorDto(authorEntity.get());
+    }
+
+    @Override
+    public void updateAuthor(AuthorDTO authorDTO) {
+        Optional<AuthorEntity>  authorEntity = authorRepository.findById(authorDTO.getId());
+        if (authorEntity.isEmpty()){
+            throw new AuthorNotFoundException(String.format(ResponseConstant.AUTHOR_NOT_FOUND,authorDTO.getId()));
+        }
+        AuthorEntity updatedAuthorEntity = authorMapper.authorDtoToEntity(authorDTO);
+        updatedAuthorEntity.setBooks(authorEntity.get().getBooks());
+        authorRepository.save(updatedAuthorEntity);
     }
 }

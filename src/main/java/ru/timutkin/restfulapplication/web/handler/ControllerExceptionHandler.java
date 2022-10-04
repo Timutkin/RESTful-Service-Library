@@ -24,7 +24,7 @@ public class ControllerExceptionHandler {
                 .body(new ErrorResponse(createErrorMessage(exc)));
     }
 
-    @ExceptionHandler(value = {UserNotFoundException.class, BookNotFoundException.class})
+    @ExceptionHandler(value = {UserNotFoundException.class, BookNotFoundException.class, AuthorNotFoundException.class})
     public ResponseEntity<ErrorResponse> handleNotFoundException(@NonNull final IllegalArgumentException exc) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(createErrorMessage(exc)));

@@ -35,7 +35,7 @@ public class AuthorEntity {
     @Column(name = "year_birth")
     private LocalDate yearOfBirth;
 
-    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     Set<BookEntity> books = new HashSet<>();
 
     public void addBook(BookEntity book){

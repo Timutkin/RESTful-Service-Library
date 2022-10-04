@@ -17,7 +17,7 @@ public class ResponseConstant {
 
     public static final String AUTHOR_ALREADY_EXISTS = "This author already exists";
 
-
+    public static final String AUTHOR_NOT_FOUND = "Author with id = %d not found";
 
 
 }
