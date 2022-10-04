@@ -89,7 +89,19 @@ public class UserController {
         userService.updateUser(userDTO);
         return ResponseEntity.ok(userDTO);
     }
-
+    @Operation(summary = "Binds book to user",
+            responses = {
+                    @ApiResponse( responseCode = "200",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = UserBookResponse.class)
+                            )),
+                    @ApiResponse(description = ResponseConstant.BOOK_WITH_ID_D_NOT_FOUND, responseCode = "400",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(description = ResponseConstant.USER_WITH_ID_NOT_FOUND, responseCode = "400",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ErrorResponse.class))),
+            })
     @PostMapping("/bind")
     public ResponseEntity<UserBookResponse> addBookToUser(@RequestBody UserBookRequest userBookRequest){
         UserBookResponse userBookResponse = userService.bindBookToUser(userBookRequest);
