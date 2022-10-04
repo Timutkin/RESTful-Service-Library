@@ -28,7 +28,7 @@ public class AuthorController {
 
     AuthorDataFacade authorDataFacade;
 
-    @Operation(summary = "Creates a author", description = SwaggerDescription.CREATE_AUTHOR,
+    @Operation(summary = "Create an author", description = SwaggerDescription.CREATE_AUTHOR,
             responses = {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -44,7 +44,7 @@ public class AuthorController {
         return ResponseEntity.ok(authorResponse);
     }
 
-    @Operation(summary = "Creates a author", description = SwaggerDescription.CREATE_AUTHOR,
+    @Operation(summary = "Get an author", description = SwaggerDescription.CREATE_AUTHOR,
             responses = {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -60,7 +60,7 @@ public class AuthorController {
         return ResponseEntity.ok(authorDto);
     }
 
-    @Operation(summary = "Deletes a author", description = SwaggerDescription.CREATE_AUTHOR,
+    @Operation(summary = "Update an author", description = SwaggerDescription.CREATE_AUTHOR,
             responses = {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -76,7 +76,7 @@ public class AuthorController {
         return ResponseEntity.ok(authorDTO);
     }
 
-    @Operation(summary = "Deletes a author", description = SwaggerDescription.CREATE_AUTHOR,
+    @Operation(summary = "Delete an author", description = SwaggerDescription.CREATE_AUTHOR,
             responses = {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,

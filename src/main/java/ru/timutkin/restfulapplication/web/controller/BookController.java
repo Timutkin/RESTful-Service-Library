@@ -32,7 +32,7 @@ public class BookController {
 
 
     @PostMapping
-    @Operation(summary = "Creates a book", description = "",
+    @Operation(summary = "Create a book", description = "",
             responses = {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -51,7 +51,7 @@ public class BookController {
 
 
     @GetMapping("/{id}")
-    @Operation(summary = "Gets a book",
+    @Operation(summary = "Get a book",
             responses = {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -69,7 +69,7 @@ public class BookController {
 
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Deletes a book by id",
+    @Operation(summary = "Delete a book by id",
             responses = {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -84,7 +84,7 @@ public class BookController {
     }
     @PutMapping
     @DeleteMapping("/{id}")
-    @Operation(summary = "Deletes a book by id",
+    @Operation(summary = "Update a book by id",
             responses = {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,

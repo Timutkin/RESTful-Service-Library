@@ -1,1 +1,730 @@
-{"openapi":"3.0.1","info":{"title":"RESTful service for Library","description":"The service allows you to keep records of books of library visitors","version":"1.0"},"servers":[{"url":"http://localhost:2000/Library","description":"Generated server url"}],"paths":{"/api/v1/users":{"put":{"tags":["user-controller"],"summary":"Updates a user","operationId":"updateUser","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserDTO"}}},"required":true},"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserDTO"}}}},"400":{"description":"User with id = %d not found","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"409":{"description":"A user with email = %s already exists","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}}}},"post":{"tags":["user-controller"],"summary":"Creates a new user of library","operationId":"createUser","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserDTO"}}},"required":true},"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"integer","format":"int64"}}}},"409":{"description":"A user with email = %s already exists","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}}}}},"/api/v1/books":{"put":{"tags":["book-controller"],"summary":"Deletes a book by id","operationId":"updateBook","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/BookDTO"}}},"required":true},"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"integer","format":"int64"}}}},"400":{"description":"Book with id = %d not found","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}}}},"post":{"tags":["book-controller"],"summary":"Creates a book","operationId":"createBook","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/BookAuthorRequest"}}},"required":true},"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"integer","format":"int64"}}}},"409":{"description":"Conflict","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}}}}},"/api/v1/authors":{"put":{"tags":["author-controller"],"summary":"Deletes a author","description":"If AuthorBookRequest does not contain a List<BookDTO>, then an author will be created. If it contains a List<BookDTO>:\nA BookDTO can only be passed with an id, then this object will be considered existing, there will be no recording or updating of the state.\nIf the message is transmitted without an id, it is assumed that the book does not exist, it will be created. In both cases, objects are automatically binded.","operationId":"updateAuthor","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthorDTO"}}},"required":true},"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthorDTO"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}}}},"post":{"tags":["author-controller"],"summary":"Creates a author","description":"If AuthorBookRequest does not contain a List<BookDTO>, then an author will be created. If it contains a List<BookDTO>:\nA BookDTO can only be passed with an id, then this object will be considered existing, there will be no recording or updating of the state.\nIf the message is transmitted without an id, it is assumed that the book does not exist, it will be created. In both cases, objects are automatically binded.","operationId":"createAuthor","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthorBookRequest"}}},"required":true},"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthorResponse"}}}},"409":{"description":"Conflict","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}}}}},"/api/v1/users/bind":{"post":{"tags":["user-controller"],"summary":"Binds book to user","operationId":"addBookToUser","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserBookRequest"}}},"required":true},"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserBookResponse"}}}},"400":{"description":"User with id = %d not found","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}}}}},"/api/v1/users/{id}":{"get":{"tags":["user-controller"],"summary":"Gets a user by id","operationId":"getUserById","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserDTO"}}}},"400":{"description":"User with id = %d not found","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}}}},"delete":{"tags":["user-controller"],"summary":"Deletes a user by id","operationId":"deleteUser","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"integer","format":"int64"}}}},"400":{"description":"User with id = %d not found","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}}}}},"/api/v1/books/{id}":{"get":{"tags":["book-controller"],"summary":"Gets a book","operationId":"getBookById","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"$ref":"#/components/schemas/BookDTO"}}}},"400":{"description":"Book with id = %d not found","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}}}},"delete":{"tags":["book-controller"],"summary":"Deletes a book by id","operationId":"deleteBookById","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"integer","format":"int64"}}}},"400":{"description":"Book with id = %d not found","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}}}}},"/api/v1/authors/{id}":{"get":{"tags":["author-controller"],"summary":"Creates a author","description":"If AuthorBookRequest does not contain a List<BookDTO>, then an author will be created. If it contains a List<BookDTO>:\nA BookDTO can only be passed with an id, then this object will be considered existing, there will be no recording or updating of the state.\nIf the message is transmitted without an id, it is assumed that the book does not exist, it will be created. In both cases, objects are automatically binded.","operationId":"getAuthorById","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthorResponse"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}}}},"delete":{"tags":["author-controller"],"summary":"Deletes a author","description":"If AuthorBookRequest does not contain a List<BookDTO>, then an author will be created. If it contains a List<BookDTO>:\nA BookDTO can only be passed with an id, then this object will be considered existing, there will be no recording or updating of the state.\nIf the message is transmitted without an id, it is assumed that the book does not exist, it will be created. In both cases, objects are automatically binded.","operationId":"deleteAuthor","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"integer","format":"int64"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}}}}}},"components":{"schemas":{"UserDTO":{"type":"object","properties":{"id":{"type":"integer","format":"int64"},"email":{"type":"string"},"firstName":{"type":"string"},"lastName":{"type":"string"}}},"ErrorResponse":{"type":"object","properties":{"errorMessage":{"type":"string"}}},"BookDTO":{"type":"object","properties":{"id":{"type":"integer","format":"int64"},"title":{"type":"string"},"yearOfPrinting":{"type":"integer","format":"int32"},"numberOfParts":{"type":"integer","format":"int32"},"countOfPage":{"type":"integer","format":"int32"},"genreOfLiterature":{"type":"string","enum":["HISTORY","THRILLER","ROMANCE","SATIRE","HORROR","RELIGIOUS","DICTIONARY","ENCYCLOPEDIA","SERIES","ANTHOLOGY","FANTASY","POLITICS"]}}},"AuthorDTO":{"type":"object","properties":{"id":{"type":"integer","format":"int64"},"firstName":{"type":"string"},"lastName":{"type":"string"},"patronymic":{"type":"string"},"yearOfBirth":{"type":"string","format":"date"}}},"UserBookResponse":{"type":"object","properties":{"userDTO":{"$ref":"#/components/schemas/UserDTO"},"listOfTitleBooks":{"type":"array","items":{"type":"string"}}}},"UserBookRequest":{"type":"object","properties":{"userId":{"type":"integer","format":"int64"},"booksId":{"type":"array","items":{"type":"integer","format":"int64"}}}},"BookAuthorRequest":{"type":"object","properties":{"bookDto":{"$ref":"#/components/schemas/BookDTO"},"authorDtoList":{"type":"array","items":{"$ref":"#/components/schemas/AuthorDTO"}}}},"AuthorResponse":{"type":"object","properties":{"authorDTO":{"$ref":"#/components/schemas/AuthorDTO"},"booksId":{"type":"array","items":{"type":"integer","format":"int64"}}}},"AuthorBookRequest":{"type":"object","properties":{"authorDto":{"$ref":"#/components/schemas/AuthorDTO"},"bookDtoList":{"type":"array","items":{"$ref":"#/components/schemas/BookDTO"}}}}}}}
+
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "RESTful service for Library",
+    "description": "The service allows you to keep records of books of library visitors",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:2000/Library",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/api/v1/users": {
+      "put": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "Update a user",
+        "operationId": "updateUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User with id = %d not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A user with email = %s already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "Create a new user of library",
+        "operationId": "createUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A user with email = %s already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/books": {
+      "put": {
+        "tags": [
+          "book-controller"
+        ],
+        "summary": "Update a book by id",
+        "operationId": "updateBook",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Book with id = %d not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "book-controller"
+        ],
+        "summary": "Create a book",
+        "operationId": "createBook",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookAuthorRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/authors": {
+      "put": {
+        "tags": [
+          "author-controller"
+        ],
+        "summary": "Update an author",
+        "description": "If AuthorBookRequest does not contain a List<BookDTO>, then an author will be created. If it contains a List<BookDTO>:\nA BookDTO can only be passed with an id, then this object will be considered existing, there will be no recording or updating of the state.\nIf the message is transmitted without an id, it is assumed that the book does not exist, it will be created. In both cases, objects are automatically binded.",
+        "operationId": "updateAuthor",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthorDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "author-controller"
+        ],
+        "summary": "Create an author",
+        "description": "If AuthorBookRequest does not contain a List<BookDTO>, then an author will be created. If it contains a List<BookDTO>:\nA BookDTO can only be passed with an id, then this object will be considered existing, there will be no recording or updating of the state.\nIf the message is transmitted without an id, it is assumed that the book does not exist, it will be created. In both cases, objects are automatically binded.",
+        "operationId": "createAuthor",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthorBookRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/bind": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "Bind book to user",
+        "operationId": "addBookToUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserBookRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserBookResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User with id = %d not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/{id}": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "Get a user by id",
+        "operationId": "getUserById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User with id = %d not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "Delete a user by id",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User with id = %d not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/books/{id}": {
+      "get": {
+        "tags": [
+          "book-controller"
+        ],
+        "summary": "Get a book",
+        "operationId": "getBookById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Book with id = %d not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "book-controller"
+        ],
+        "summary": "Delete a book by id",
+        "operationId": "deleteBookById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Book with id = %d not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/authors/{id}": {
+      "get": {
+        "tags": [
+          "author-controller"
+        ],
+        "summary": "Get an author",
+        "description": "If AuthorBookRequest does not contain a List<BookDTO>, then an author will be created. If it contains a List<BookDTO>:\nA BookDTO can only be passed with an id, then this object will be considered existing, there will be no recording or updating of the state.\nIf the message is transmitted without an id, it is assumed that the book does not exist, it will be created. In both cases, objects are automatically binded.",
+        "operationId": "getAuthorById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "author-controller"
+        ],
+        "summary": "Delete an author",
+        "description": "If AuthorBookRequest does not contain a List<BookDTO>, then an author will be created. If it contains a List<BookDTO>:\nA BookDTO can only be passed with an id, then this object will be considered existing, there will be no recording or updating of the state.\nIf the message is transmitted without an id, it is assumed that the book does not exist, it will be created. In both cases, objects are automatically binded.",
+        "operationId": "deleteAuthor",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "email": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "errorMessage": {
+            "type": "string"
+          }
+        }
+      },
+      "BookDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string"
+          },
+          "yearOfPrinting": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "numberOfParts": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "countOfPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "genreOfLiterature": {
+            "type": "string",
+            "enum": [
+              "HISTORY",
+              "THRILLER",
+              "ROMANCE",
+              "SATIRE",
+              "HORROR",
+              "RELIGIOUS",
+              "DICTIONARY",
+              "ENCYCLOPEDIA",
+              "SERIES",
+              "ANTHOLOGY",
+              "FANTASY",
+              "POLITICS"
+            ]
+          }
+        }
+      },
+      "AuthorDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "patronymic": {
+            "type": "string"
+          },
+          "yearOfBirth": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "UserBookResponse": {
+        "type": "object",
+        "properties": {
+          "userDTO": {
+            "$ref": "#/components/schemas/UserDTO"
+          },
+          "listOfTitleBooks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "UserBookRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "booksId": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "BookAuthorRequest": {
+        "type": "object",
+        "properties": {
+          "bookDto": {
+            "$ref": "#/components/schemas/BookDTO"
+          },
+          "authorDtoList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AuthorDTO"
+            }
+          }
+        }
+      },
+      "AuthorResponse": {
+        "type": "object",
+        "properties": {
+          "authorDTO": {
+            "$ref": "#/components/schemas/AuthorDTO"
+          },
+          "booksId": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "AuthorBookRequest": {
+        "type": "object",
+        "properties": {
+          "authorDto": {
+            "$ref": "#/components/schemas/AuthorDTO"
+          },
+          "bookDtoList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BookDTO"
+            }
+          }
+        }
+      }
+    }
+  }
+}

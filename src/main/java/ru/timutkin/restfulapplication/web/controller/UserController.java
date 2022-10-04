@@ -26,7 +26,7 @@ public class UserController {
     UserService userService;
 
     @PostMapping
-    @Operation(summary = "Creates a new user of library",
+    @Operation(summary = "Create a new user of library",
             responses = {
                 @ApiResponse(responseCode = "200",
                         content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Deletes a user by id",
+    @Operation(summary = "Delete a user by id",
             responses = {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Gets a user by id",
+    @Operation(summary = "Get a user by id",
             responses = {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -72,7 +72,7 @@ public class UserController {
 
 
     @PutMapping
-    @Operation(summary = "Updates a user",
+    @Operation(summary = "Update a user",
             responses = {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -89,7 +89,7 @@ public class UserController {
         userService.updateUser(userDTO);
         return ResponseEntity.ok(userDTO);
     }
-    @Operation(summary = "Binds book to user",
+    @Operation(summary = "Bind book to user",
             responses = {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
