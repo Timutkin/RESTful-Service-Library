@@ -3,6 +3,8 @@ package ru.timutkin.restfulapplication.service;
 import ru.timutkin.restfulapplication.dto.UserDTO;
 import ru.timutkin.restfulapplication.exception.EmailAlreadyExistsException;
 import ru.timutkin.restfulapplication.exception.UserNotFoundException;
+import ru.timutkin.restfulapplication.web.request.UserBookRequest;
+import ru.timutkin.restfulapplication.web.response.UserBookResponse;
 
 public interface UserService {
     Long createUser(UserDTO userDTO) throws EmailAlreadyExistsException;
@@ -12,4 +14,6 @@ public interface UserService {
     UserDTO getUserById(Long id) throws  UserNotFoundException;
 
     void updateUser(UserDTO updateUserDTO) throws UserNotFoundException, EmailAlreadyExistsException;
+
+    UserBookResponse bindBookToUser(UserBookRequest userBookRequest);
 }

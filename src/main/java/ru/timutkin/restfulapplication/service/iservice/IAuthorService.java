@@ -91,6 +91,7 @@ public class IAuthorService implements AuthorService {
         return authorResponse;
     }
 
+    @Transactional
     @Override
     public void deleteAuthorById(Long id) {
         if (!authorRepository.existsById(id)){
@@ -99,6 +100,7 @@ public class IAuthorService implements AuthorService {
         authorRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public AuthorDTO getAuthorById(Long id) {
         Optional<AuthorEntity> authorEntity = authorRepository.findById(id);
@@ -108,6 +110,7 @@ public class IAuthorService implements AuthorService {
         return authorMapper.authorEntityToAuthorDto(authorEntity.get());
     }
 
+    @Transactional()
     @Override
     public void updateAuthor(AuthorDTO authorDTO) {
         Optional<AuthorEntity>  authorEntity = authorRepository.findById(authorDTO.getId());

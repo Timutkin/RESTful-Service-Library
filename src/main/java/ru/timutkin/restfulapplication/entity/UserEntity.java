@@ -52,4 +52,9 @@ public class UserEntity {
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(getFirstName()).append(getLastName()).append(getEmail()).toHashCode();
     }
+
+    public void addBook(BookEntity book){
+        listOfBooks.add(book);
+        book.getUsers().add(this);
+    }
 }

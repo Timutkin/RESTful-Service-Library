@@ -12,7 +12,9 @@ import ru.timutkin.restfulapplication.dto.UserDTO;
 import ru.timutkin.restfulapplication.service.UserService;
 import ru.timutkin.restfulapplication.web.constant.ResponseConstant;
 import ru.timutkin.restfulapplication.web.constant.WebConstant;
+import ru.timutkin.restfulapplication.web.request.UserBookRequest;
 import ru.timutkin.restfulapplication.web.response.ErrorResponse;
+import ru.timutkin.restfulapplication.web.response.UserBookResponse;
 
 
 @RestController
@@ -86,6 +88,12 @@ public class UserController {
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO){
         userService.updateUser(userDTO);
         return ResponseEntity.ok(userDTO);
+    }
+
+    @PostMapping("/bind")
+    public ResponseEntity<UserBookResponse> addBookToUser(@RequestBody UserBookRequest userBookRequest){
+        UserBookResponse userBookResponse = userService.bindBookToUser(userBookRequest);
+        return ResponseEntity.ok(userBookResponse);
     }
 
 
