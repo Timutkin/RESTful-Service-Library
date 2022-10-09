@@ -29,6 +29,9 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 /gen
+src/test/java/ru/timutkin/restfulapplication/unit
 
 ### VS Code ###
 .vscode/
+
+
