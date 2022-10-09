@@ -9,13 +9,18 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.timutkin.restfulapplication.dto.AuthorDTO;
+import ru.timutkin.restfulapplication.dto.BookDTO;
 import ru.timutkin.restfulapplication.facade.AuthorDataFacade;
 import ru.timutkin.restfulapplication.service.AuthorService;
 import ru.timutkin.restfulapplication.web.constant.SwaggerDescription;
 import ru.timutkin.restfulapplication.web.constant.WebConstant;
 import ru.timutkin.restfulapplication.web.request.AuthorBookRequest;
 import ru.timutkin.restfulapplication.web.response.AuthorResponse;
+import ru.timutkin.restfulapplication.web.response.AuthorWithBookIdResponse;
 import ru.timutkin.restfulapplication.web.response.ErrorResponse;
+import ru.timutkin.restfulapplication.web.response.AuthorWithBooksResponse;
+
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -32,7 +37,7 @@ public class AuthorController {
             responses = {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = AuthorResponse.class)
+                                    schema = @Schema(implementation = AuthorWithBookIdResponse.class)
                             )),
                     @ApiResponse( responseCode = "409",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -40,24 +45,24 @@ public class AuthorController {
                             ))})
     @PostMapping
     public ResponseEntity<AuthorResponse> createAuthor(@RequestBody AuthorBookRequest authorBookRequest){
-        AuthorResponse authorResponse = authorDataFacade.createAuthor(authorBookRequest);
-        return ResponseEntity.ok(authorResponse);
+        AuthorResponse authorWithBookIdResponse = authorDataFacade.createAuthor(authorBookRequest);
+        return ResponseEntity.ok(authorWithBookIdResponse);
     }
 
     @Operation(summary = "Get an author", description = SwaggerDescription.CREATE_AUTHOR,
             responses = {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = AuthorResponse.class)
+                                    schema = @Schema(implementation = AuthorWithBookIdResponse.class)
                             )),
                     @ApiResponse( responseCode = "400",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ErrorResponse.class)
                             ))})
     @GetMapping("/{id}")
-    public ResponseEntity<AuthorDTO> getAuthorById(@PathVariable Long id){
-        AuthorDTO authorDto = authorService.getAuthorById(id);
-        return ResponseEntity.ok(authorDto);
+    public ResponseEntity<AuthorResponse> getAuthorById(@PathVariable Long id, @RequestParam(name = "fullLoad", required = false) Boolean fullLoad){
+        AuthorResponse authorResponse = authorDataFacade.getAuthor(id, fullLoad);
+        return ResponseEntity.ok(authorResponse);
     }
 
     @Operation(summary = "Update an author", description = SwaggerDescription.CREATE_AUTHOR,
@@ -90,6 +95,12 @@ public class AuthorController {
     public ResponseEntity<Long> deleteAuthor(@PathVariable Long id){
         authorService.deleteAuthorById(id);
         return ResponseEntity.ok(id);
+    }
+
+    @GetMapping("/books/{id}")
+    public ResponseEntity<List<BookDTO>> getBooksByAuthorId(@PathVariable Long id){
+        List<BookDTO> bookDTOList = authorService.getBooksByAuthorId(id);
+        return ResponseEntity.ok(bookDTOList);
     }
 
 

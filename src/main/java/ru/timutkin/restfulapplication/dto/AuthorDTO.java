@@ -2,7 +2,7 @@ package ru.timutkin.restfulapplication.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.timutkin.restfulapplication.enumeration.GenreOfLiterature;
+import ru.timutkin.restfulapplication.web.response.AuthorResponse;
 
 import java.time.LocalDate;
 
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthorDTO {
+public class AuthorDTO implements AuthorResponse {
      Long id;
 
      String firstName;

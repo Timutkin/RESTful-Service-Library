@@ -15,7 +15,6 @@ import ru.timutkin.restfulapplication.service.BookService;
 import ru.timutkin.restfulapplication.web.constant.ResponseConstant;
 import ru.timutkin.restfulapplication.web.constant.WebConstant;
 import ru.timutkin.restfulapplication.web.request.BookAuthorRequest;
-import ru.timutkin.restfulapplication.web.response.AuthorResponse;
 import ru.timutkin.restfulapplication.web.response.BookResponse;
 import ru.timutkin.restfulapplication.web.response.ErrorResponse;
 

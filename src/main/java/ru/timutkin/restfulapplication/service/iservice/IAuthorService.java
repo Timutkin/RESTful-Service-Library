@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.timutkin.restfulapplication.dto.AuthorDTO;
 import ru.timutkin.restfulapplication.dto.BookDTO;
 import ru.timutkin.restfulapplication.entity.AuthorEntity;
-import ru.timutkin.restfulapplication.entity.BookEntity;
 import ru.timutkin.restfulapplication.exception.AuthorNotFoundException;
 import ru.timutkin.restfulapplication.exception.DataAlreadyExistsException;
 import ru.timutkin.restfulapplication.exception.IncorrectDataException;
@@ -17,12 +16,12 @@ import ru.timutkin.restfulapplication.repository.BookRepository;
 import ru.timutkin.restfulapplication.service.AuthorService;
 import ru.timutkin.restfulapplication.web.constant.ResponseConstant;
 import ru.timutkin.restfulapplication.web.response.AuthorResponse;
+import ru.timutkin.restfulapplication.web.response.AuthorWithBookIdResponse;
+import ru.timutkin.restfulapplication.web.response.AuthorWithBooksResponse;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+import javax.persistence.EntityGraph;
+import javax.persistence.EntityManager;
+import java.util.*;
 
 
 @AllArgsConstructor
@@ -37,10 +36,12 @@ public class IAuthorService implements AuthorService {
 
     BookRepository bookRepository;
 
+    EntityManager entityManager;
+
 
     @Transactional
     @Override
-    public AuthorResponse createAuthorWithoutBooks(AuthorDTO authorDTO) throws IncorrectDataException {
+    public AuthorWithBookIdResponse createAuthorWithoutBooks(AuthorDTO authorDTO) throws IncorrectDataException {
         if (authorRepository.existsByFirstNameAndAndLastNameAndAndPatronymicAndYearOfBirth(
                 authorDTO.getFirstName(), authorDTO.getLastName(), authorDTO.getPatronymic(), authorDTO.getYearOfBirth()
         )){
@@ -48,21 +49,21 @@ public class IAuthorService implements AuthorService {
         }
         AuthorEntity authorEntity = authorMapper.authorDtoToEntity(authorDTO);
         authorRepository.save(authorEntity);
-        return AuthorResponse.builder()
+        return AuthorWithBookIdResponse.builder()
                 .authorDTO(authorMapper.authorEntityToAuthorDto(authorEntity))
                 .build();
     }
 
     @Transactional
     @Override
-    public AuthorResponse createAuthorWithBooks(AuthorDTO authorDTO, List<BookDTO> list) throws IncorrectDataException {
+    public AuthorWithBookIdResponse createAuthorWithBooks(AuthorDTO authorDTO, List<BookDTO> list) throws IncorrectDataException {
         if (authorRepository.existsByFirstNameAndAndLastNameAndAndPatronymicAndYearOfBirth(
                 authorDTO.getFirstName(), authorDTO.getLastName(), authorDTO.getPatronymic(), authorDTO.getYearOfBirth()
         )){
             throw new DataAlreadyExistsException(ResponseConstant.AUTHOR_ALREADY_EXISTS);
         }
 
-        AuthorResponse authorResponse = new AuthorResponse();
+        AuthorWithBookIdResponse authorWithBookIdResponse = new AuthorWithBookIdResponse();
         AuthorEntity authorEntity = authorMapper.authorDtoToEntity(authorDTO);
 
         authorEntity.setBooks(new HashSet<>());
@@ -72,7 +73,7 @@ public class IAuthorService implements AuthorService {
                 .filter(bookEntity -> bookEntity.getId() == null)
                 .peek(el-> el.setAuthors(new HashSet<>()))
                 .peek(bookRepository::save)
-                .peek(bookEntity -> authorResponse.addBookId(bookEntity.getId()))
+                .peek(bookEntity -> authorWithBookIdResponse.addBookId(bookEntity.getId()))
                 .forEach(authorEntity::addBook);
 
         authorRepository.save(authorEntity);
@@ -80,15 +81,15 @@ public class IAuthorService implements AuthorService {
         list.stream()
                 .map(bookMapper::bookDtoToBookEntity)
                 .filter(bookEntity -> bookEntity.getId() != null)
-                .peek(bookEntity -> authorResponse.addBookId(bookEntity.getId()))
+                .peek(bookEntity -> authorWithBookIdResponse.addBookId(bookEntity.getId()))
                 .map(bookEntity -> bookRepository.getBookEntityById(bookEntity.getId()))
                 .forEach(authorEntity::addBook);
 
         authorRepository.saveAndFlush(authorEntity);
 
-        authorResponse.setAuthorDTO(authorMapper.authorEntityToAuthorDto(authorEntity));
+        authorWithBookIdResponse.setAuthorDTO(authorMapper.authorEntityToAuthorDto(authorEntity));
 
-        return authorResponse;
+        return authorWithBookIdResponse;
     }
 
     @Transactional
@@ -120,5 +121,39 @@ public class IAuthorService implements AuthorService {
         AuthorEntity updatedAuthorEntity = authorMapper.authorDtoToEntity(authorDTO);
         updatedAuthorEntity.setBooks(authorEntity.get().getBooks());
         authorRepository.save(updatedAuthorEntity);
+    }
+
+
+    @Override
+    public List<BookDTO> getBooksByAuthorId(Long id) {
+        return getFullAuthorById(id).getBooks().stream()
+                .map(bookMapper::bookEntityToBookDto)
+                .toList();
+    }
+
+    @Override
+    public AuthorWithBooksResponse getFullAuthorDataById(Long id) {
+        AuthorEntity author = getFullAuthorById(id);
+        return AuthorWithBooksResponse.builder()
+                .authorDTO(authorMapper.authorEntityToAuthorDto(author))
+                .bookDTOS(author.getBooks().stream()
+                        .map(bookMapper::bookEntityToBookDto)
+                        .toList()
+                )
+                .build();
+    }
+
+
+    @Transactional(readOnly = true)
+    public AuthorEntity getFullAuthorById(Long id){
+        EntityGraph<AuthorEntity> graph = entityManager.createEntityGraph(AuthorEntity.class);
+        graph.addAttributeNodes("books");
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("javax.persistence.fetchgraph", graph);
+        AuthorEntity author = entityManager.find(AuthorEntity.class, id, properties);
+        if(author==null){
+            throw new AuthorNotFoundException(String.format(ResponseConstant.AUTHOR_NOT_FOUND,id));
+        }
+        return author;
     }
 }

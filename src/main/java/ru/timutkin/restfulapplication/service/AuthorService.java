@@ -13,7 +13,11 @@ public interface AuthorService {
 
     void deleteAuthorById(Long id);
 
-    AuthorDTO getAuthorById(Long id);
+    AuthorResponse getAuthorById(Long id);
 
     void updateAuthor(AuthorDTO authorDTO);
+
+    List<BookDTO> getBooksByAuthorId(Long id);
+
+    AuthorResponse getFullAuthorDataById(Long id);
 }

@@ -8,6 +8,7 @@ import ru.timutkin.restfulapplication.service.AuthorService;
 
 import ru.timutkin.restfulapplication.web.request.AuthorBookRequest;
 import ru.timutkin.restfulapplication.web.response.AuthorResponse;
+import ru.timutkin.restfulapplication.web.response.AuthorWithBooksResponse;
 
 import java.util.List;
 
@@ -28,5 +29,16 @@ public class AuthorDataFacade {
             response = authorService.createAuthorWithBooks(authorDTO, bookDTOList);
         }
         return response;
+    }
+
+    public AuthorResponse getAuthor(Long id, Boolean fullLoad){
+        AuthorResponse authorResponse;
+        if (fullLoad == null || !fullLoad){
+            authorResponse = authorService.getAuthorById(id);
+        }
+        else {
+            authorResponse = authorService.getFullAuthorDataById(id);
+        }
+        return authorResponse;
     }
 }
