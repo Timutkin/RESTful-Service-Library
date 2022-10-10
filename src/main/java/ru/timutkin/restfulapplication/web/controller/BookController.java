@@ -15,8 +15,11 @@ import ru.timutkin.restfulapplication.service.BookService;
 import ru.timutkin.restfulapplication.web.constant.ResponseConstant;
 import ru.timutkin.restfulapplication.web.constant.WebConstant;
 import ru.timutkin.restfulapplication.web.request.BookAuthorRequest;
-import ru.timutkin.restfulapplication.web.response.BookResponse;
+import ru.timutkin.restfulapplication.web.response.book.BookResponse;
 import ru.timutkin.restfulapplication.web.response.ErrorResponse;
+import ru.timutkin.restfulapplication.web.response.book.BookWithAuthorsResponse;
+
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -43,11 +46,10 @@ public class BookController {
                             ))})
     public ResponseEntity<BookResponse> createBook(@RequestBody BookAuthorRequest bookAuthorRequest){
 
-        BookResponse bookResponse = bookDataFacade.createBook(bookAuthorRequest);
+        BookResponse bookWithAuthorIdResponse = bookDataFacade.createBook(bookAuthorRequest);
 
-        return ResponseEntity.ok(bookResponse);
+        return ResponseEntity.ok(bookWithAuthorIdResponse);
     }
-
 
     @GetMapping("/{id}")
     @Operation(summary = "Get a book",
@@ -56,16 +58,19 @@ public class BookController {
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = BookDTO.class)
                             )),
+                    @ApiResponse( responseCode = "200",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = BookWithAuthorsResponse.class)
+                            )),
                     @ApiResponse(description = ResponseConstant.BOOK_WITH_ID_D_NOT_FOUND, responseCode = "400",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ErrorResponse.class)))})
-    public ResponseEntity<BookDTO> getBookById(@PathVariable Long id){
+    public ResponseEntity<BookResponse> getBookById(@PathVariable Long id, @RequestParam(name = "fullLoad", required = false) Boolean fullLoad){
 
-        BookDTO bookDTO =  bookService.getBookById(id);
+        BookResponse bookResponse = bookDataFacade.getBookById(id, fullLoad);
 
-        return ResponseEntity.ok(bookDTO);
+        return ResponseEntity.ok(bookResponse);
     }
-
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a book by id",
@@ -98,6 +103,22 @@ public class BookController {
         }
         bookService.updateBook(bookDTO);
         return ResponseEntity.ok(bookDTO);
+    }
+
+
+    @GetMapping("/list/{numberOfPage}")
+    @Operation(summary = "Get page of list of books by number of page", description = "The list of books wil be sorted by title",
+            responses = {
+                    @ApiResponse( responseCode = "200",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = List.class)
+                            )),
+                    @ApiResponse(description = ResponseConstant.BOOK_WITH_ID_D_NOT_FOUND, responseCode = "400",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ErrorResponse.class)))})
+    public ResponseEntity<List<BookDTO>> getListOfBooks(@PathVariable Integer numberOfPage){
+        List<BookDTO> bookDTOList = bookService.getListOfBooks(numberOfPage);
+        return ResponseEntity.ok(bookDTOList);
     }
 
 

@@ -6,7 +6,8 @@ import ru.timutkin.restfulapplication.dto.AuthorDTO;
 import ru.timutkin.restfulapplication.dto.BookDTO;
 import ru.timutkin.restfulapplication.service.BookService;
 import ru.timutkin.restfulapplication.web.request.BookAuthorRequest;
-import ru.timutkin.restfulapplication.web.response.BookResponse;
+import ru.timutkin.restfulapplication.web.response.book.BookResponse;
+import ru.timutkin.restfulapplication.web.response.book.BookWithAuthorIdResponse;
 
 import java.util.List;
 
@@ -19,13 +20,21 @@ public class BookDataFacade {
     public BookResponse createBook(BookAuthorRequest bookAuthorRequest) {
         BookDTO bookDTO = bookAuthorRequest.getBookDto();
         List<AuthorDTO> authorDtoList = bookAuthorRequest.getAuthorDtoList();
-        BookResponse response;
         if (authorDtoList == null || authorDtoList.isEmpty()){
-            response = bookService.createBookWithoutAuthors(bookDTO);
+            return bookService.createBookWithoutAuthors(bookDTO);
         }
         else {
-            response = bookService.createBookWithAuthors(bookDTO, authorDtoList);
+            return bookService.createBookWithAuthors(bookDTO, authorDtoList);
         }
-        return response;
+    }
+
+    public BookResponse getBookById(Long id, Boolean fullLoad){
+        BookResponse response;
+        if (fullLoad == null || !fullLoad){
+           return bookService.getBookById(id);
+        }
+        else {
+            return bookService.getFullDataBookById(id);
+        }
     }
 }

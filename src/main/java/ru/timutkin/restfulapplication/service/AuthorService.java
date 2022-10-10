@@ -3,7 +3,8 @@ package ru.timutkin.restfulapplication.service;
 import ru.timutkin.restfulapplication.dto.AuthorDTO;
 import ru.timutkin.restfulapplication.dto.BookDTO;
 import ru.timutkin.restfulapplication.exception.IncorrectDataException;
-import ru.timutkin.restfulapplication.web.response.AuthorResponse;
+import ru.timutkin.restfulapplication.web.response.author.AuthorResponse;
+import ru.timutkin.restfulapplication.web.response.book.BookResponse;
 
 import java.util.List;
 

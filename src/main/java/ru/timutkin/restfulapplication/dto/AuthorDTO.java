@@ -2,7 +2,7 @@ package ru.timutkin.restfulapplication.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.timutkin.restfulapplication.web.response.AuthorResponse;
+import ru.timutkin.restfulapplication.web.response.author.AuthorResponse;
 
 import java.time.LocalDate;
 

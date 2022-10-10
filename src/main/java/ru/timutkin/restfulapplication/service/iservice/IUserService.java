@@ -2,7 +2,6 @@ package ru.timutkin.restfulapplication.service.iservice;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.Target;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.timutkin.restfulapplication.dto.UserDTO;
@@ -16,9 +15,8 @@ import ru.timutkin.restfulapplication.repository.BookRepository;
 import ru.timutkin.restfulapplication.repository.UserRepository;
 import ru.timutkin.restfulapplication.service.UserService;
 import ru.timutkin.restfulapplication.web.constant.ResponseConstant;
-import ru.timutkin.restfulapplication.web.constant.WebConstant;
 import ru.timutkin.restfulapplication.web.request.UserBookRequest;
-import ru.timutkin.restfulapplication.web.response.UserBookResponse;
+import ru.timutkin.restfulapplication.web.response.user.UserBookResponse;
 
 import java.util.List;
 import java.util.Optional;

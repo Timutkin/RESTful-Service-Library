@@ -15,10 +15,10 @@ import ru.timutkin.restfulapplication.service.AuthorService;
 import ru.timutkin.restfulapplication.web.constant.SwaggerDescription;
 import ru.timutkin.restfulapplication.web.constant.WebConstant;
 import ru.timutkin.restfulapplication.web.request.AuthorBookRequest;
-import ru.timutkin.restfulapplication.web.response.AuthorResponse;
-import ru.timutkin.restfulapplication.web.response.AuthorWithBookIdResponse;
+import ru.timutkin.restfulapplication.web.response.author.AuthorResponse;
+import ru.timutkin.restfulapplication.web.response.author.AuthorWithBookIdResponse;
 import ru.timutkin.restfulapplication.web.response.ErrorResponse;
-import ru.timutkin.restfulapplication.web.response.AuthorWithBooksResponse;
+import ru.timutkin.restfulapplication.web.response.book.BookResponse;
 
 import java.util.List;
 

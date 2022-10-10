@@ -7,8 +7,7 @@ import ru.timutkin.restfulapplication.dto.BookDTO;
 import ru.timutkin.restfulapplication.service.AuthorService;
 
 import ru.timutkin.restfulapplication.web.request.AuthorBookRequest;
-import ru.timutkin.restfulapplication.web.response.AuthorResponse;
-import ru.timutkin.restfulapplication.web.response.AuthorWithBooksResponse;
+import ru.timutkin.restfulapplication.web.response.author.AuthorResponse;
 
 import java.util.List;
 

@@ -14,7 +14,7 @@ import ru.timutkin.restfulapplication.web.constant.ResponseConstant;
 import ru.timutkin.restfulapplication.web.constant.WebConstant;
 import ru.timutkin.restfulapplication.web.request.UserBookRequest;
 import ru.timutkin.restfulapplication.web.response.ErrorResponse;
-import ru.timutkin.restfulapplication.web.response.UserBookResponse;
+import ru.timutkin.restfulapplication.web.response.user.UserBookResponse;
 
 
 @RestController

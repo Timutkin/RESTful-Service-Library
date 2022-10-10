@@ -1,4 +1,4 @@
-package ru.timutkin.restfulapplication.web.response;
+package ru.timutkin.restfulapplication.web.response.user;
 
 
 import lombok.*;

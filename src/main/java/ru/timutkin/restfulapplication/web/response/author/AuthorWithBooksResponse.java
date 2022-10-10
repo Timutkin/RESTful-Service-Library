@@ -1,11 +1,10 @@
-package ru.timutkin.restfulapplication.web.response;
+package ru.timutkin.restfulapplication.web.response.author;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.timutkin.restfulapplication.dto.AuthorDTO;
 import ru.timutkin.restfulapplication.dto.BookDTO;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Getter

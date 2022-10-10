@@ -15,9 +15,10 @@ import ru.timutkin.restfulapplication.repository.AuthorRepository;
 import ru.timutkin.restfulapplication.repository.BookRepository;
 import ru.timutkin.restfulapplication.service.AuthorService;
 import ru.timutkin.restfulapplication.web.constant.ResponseConstant;
-import ru.timutkin.restfulapplication.web.response.AuthorResponse;
-import ru.timutkin.restfulapplication.web.response.AuthorWithBookIdResponse;
-import ru.timutkin.restfulapplication.web.response.AuthorWithBooksResponse;
+
+import ru.timutkin.restfulapplication.web.response.author.AuthorWithBookIdResponse;
+import ru.timutkin.restfulapplication.web.response.author.AuthorWithBooksResponse;
+import ru.timutkin.restfulapplication.web.response.book.BookResponse;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
@@ -125,6 +126,7 @@ public class IAuthorService implements AuthorService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<BookDTO> getBooksByAuthorId(Long id) {
         return getFullAuthorById(id).getBooks().stream()
                 .map(bookMapper::bookEntityToBookDto)
@@ -132,6 +134,7 @@ public class IAuthorService implements AuthorService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public AuthorWithBooksResponse getFullAuthorDataById(Long id) {
         AuthorEntity author = getFullAuthorById(id);
         return AuthorWithBooksResponse.builder()

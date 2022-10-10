@@ -1,4 +1,4 @@
-package ru.timutkin.restfulapplication.web.response;
+package ru.timutkin.restfulapplication.web.response.book;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BookResponse {
+public class BookWithAuthorIdResponse implements BookResponse{
     BookDTO bookDTO;
     List<Long> authorsId = new ArrayList<>();
 
