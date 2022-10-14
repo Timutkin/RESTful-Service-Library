@@ -9,14 +9,17 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.timutkin.restfulapplication.dto.BookDTO;
+import ru.timutkin.restfulapplication.entity.BookEntity;
 import ru.timutkin.restfulapplication.exception.IncorrectDataException;
 import ru.timutkin.restfulapplication.facade.BookDataFacade;
+import ru.timutkin.restfulapplication.repository.BookRepository;
 import ru.timutkin.restfulapplication.service.BookService;
 import ru.timutkin.restfulapplication.web.constant.ResponseConstant;
 import ru.timutkin.restfulapplication.web.constant.WebConstant;
 import ru.timutkin.restfulapplication.web.request.BookAuthorRequest;
 import ru.timutkin.restfulapplication.web.response.book.BookResponse;
 import ru.timutkin.restfulapplication.web.response.ErrorResponse;
+import ru.timutkin.restfulapplication.web.response.book.BookWithAuthorIdResponse;
 import ru.timutkin.restfulapplication.web.response.book.BookWithAuthorsResponse;
 
 import java.util.List;
@@ -33,12 +36,13 @@ public class BookController {
     BookDataFacade bookDataFacade;
 
 
+
     @PostMapping
     @Operation(summary = "Create a book", description = "",
             responses = {
                     @ApiResponse( responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Long.class)
+                                    schema = @Schema(implementation = BookWithAuthorIdResponse.class)
                             )),
                     @ApiResponse( responseCode = "409",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -118,6 +122,12 @@ public class BookController {
                                     schema = @Schema(implementation = ErrorResponse.class)))})
     public ResponseEntity<List<BookDTO>> getListOfBooks(@PathVariable Integer numberOfPage){
         List<BookDTO> bookDTOList = bookService.getListOfBooks(numberOfPage);
+        return ResponseEntity.ok(bookDTOList);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<BookDTO>> getListOfBooksByTitle(@RequestParam(name = "title") String title){
+        List<BookDTO> bookDTOList = bookService.getListOfBooksByTitle(title);
         return ResponseEntity.ok(bookDTOList);
     }
 

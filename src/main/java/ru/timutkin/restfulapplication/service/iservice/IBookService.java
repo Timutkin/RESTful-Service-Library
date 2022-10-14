@@ -146,14 +146,16 @@ public class IBookService implements BookService {
     @Override
     @Transactional(readOnly = true)
     public List<BookDTO> getListOfBooks(Integer numberOfPage) {
-        PageRequest pageRequest = PageRequest.of(numberOfPage-1, PAGE_SIZE, Sort.by("title"));
-        if (numberOfPage<1){
-            throw new IncorrectDataException("Number of page should be more 0");
-        }
-        return bookRepository.findAll(pageRequest).stream()
+        return null;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<BookDTO> getListOfBooksByTitle(String title) {
+        return bookRepository.findByTitleLikeIgnoreCase("%"+title+"%")
+                .stream()
                 .map(bookMapper::bookEntityToBookDto)
                 .toList();
     }
-
 
 }

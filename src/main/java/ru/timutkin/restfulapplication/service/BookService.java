@@ -23,4 +23,6 @@ public interface BookService {
     BookResponse getFullDataBookById(Long id);
 
     List<BookDTO> getListOfBooks(Integer numberOfPage);
+
+    List<BookDTO> getListOfBooksByTitle(String title);
 }
